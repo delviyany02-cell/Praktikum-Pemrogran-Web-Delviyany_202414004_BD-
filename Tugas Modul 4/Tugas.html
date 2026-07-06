@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Toko Elektronik Cepat</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body{background:#f5f5f5;font-family:'Segoe UI',sans-serif}h1{font-weight:700;color:#222}#jam{color:#666}.card{border:none;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,.08)}.card-header{font-weight:700}.bg-primary{background:#ff7a00!important}.bg-success{background:#2b2b2b!important}.bg-dark{background:#1f1f1f!important}.product-img{width:100%;max-width:420px;height:300px;object-fit:contain;background:#fff;padding:10px;border-radius:12px}#namaProduk{margin-top:18px;font-weight:700;color:#222}#hargaProduk{color:#16a34a;font-weight:700}.list-group-item{cursor:pointer;transition:.3s;font-weight:500}.list-group-item:hover{background:#ff7a00;color:#fff;padding-left:18px}.btn-primary{background:#ff7a00;border:none}.btn-primary:hover{background:#e66a00}.btn-secondary{background:#444;border:none}.btn-secondary:hover{background:#2d2d2d}.btn-success{background:#16a34a;border:none;font-weight:600}.btn-success:hover{background:#15803d}.form-control{border-radius:10px;border:1px solid #ddd}.form-control:focus{border-color:#ff7a00;box-shadow:0 0 0 .2rem rgba(255,122,0,.2)}#output{display:none}
+</style>
+</head>
+<body>
+<div class="container py-4">
+<div class="text-center mb-4">
+<h1>🛒 Toko Elektronik Cepat</h1>
+<h5 id="jam"></h5>
+</div>
+<div class="row g-4">
+<div class="col-lg-8">
+<div class="card">
+<div class="card-body text-center">
+<img id="gambarProduk" class="product-img img-fluid" alt="Produk">
+<div class="mt-3">
+<button class="btn btn-secondary me-2" onclick="prevImage()">Previous</button>
+<button class="btn btn-primary" onclick="nextImage()">Next</button>
+</div>
+<h3 id="namaProduk"></h3>
+<h4 id="hargaProduk"></h4>
+</div>
+</div>
+</div>
+<div class="col-lg-4">
+<div class="card">
+<div class="card-header bg-primary text-white">Daftar Produk</div>
+<div class="list-group list-group-flush" id="listProduk"></div>
+</div>
+</div>
+</div>
+<div class="card mt-4">
+<div class="card-header bg-success text-white">Form Pemesanan</div>
+<div class="card-body">
+<div class="mb-3"><label class="form-label">Nama Pemesan</label><input type="text" id="nama" class="form-control" placeholder="Masukkan nama"></div>
+<div class="mb-3"><label class="form-label">Jumlah Pesan</label><input type="number" id="jumlah" class="form-control" placeholder="0"></div>
+<div class="mb-3"><label class="form-label">Kode Promo</label><input type="text" id="promo" class="form-control" placeholder="DISKON10"></div>
+<button class="btn btn-success" onclick="pesan()">Pesan Sekarang</button>
+</div>
+</div>
+<div class="card mt-4" id="output">
+<div class="card-header bg-dark text-white">Struk Pemesanan</div>
+<div class="card-body" id="hasil"></div>
+</div>
+</div>
+<script>
+    let produk=[
+{nama:"Laptop ASUS VivoBook",harga:8500000,gambar:["https://down-id.img.susercontent.com/file/id-11134207-822wq-moz0y38dgvez72@resize_w900_nl.webp","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvS9S1Ji0JgYpQNNjQ-DBIaoR55f_i72tSB6uNQWdAz9wicQ6Q-LQru4Q&s=10","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWG3tSsbpMZNEQPWhTjwiqkj2Vc0WiSq9D46sbzJk_Y4pXVdOQMymF4d4&s=10"]},
+{nama:"Samsung Galaxy S24",harga:12000000,gambar:["https://cdnpro.eraspace.com/media/catalog/product/s/a/samsung_galaxy_s24_5g_amber_yellow__5_3.jpg","https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFPGFvPX6EGwKv5LUeWUfLxKjLk35y32N_moiOr1LLhw&s=10","https://i.ebayimg.com/images/g/JSwAAeSwXhxoystD/s-l1600.webp"]},
+{nama:"Headset Gaming",harga:2235000,gambar:["https://i.ebayimg.com/images/g/DMcAAeSw8p9qH0Nb/s-l960.webp","https://i.ebayimg.com/images/g/X24AAeSw60JqH0NZ/s-l960.webp","https://i.ebayimg.com/images/g/L7MAAeSwza9qH0Nf/s-l960.webp"]}
+];
+let produkAktif=0,gambarAktif=0;
+function tampilProduk(){
+let p=produk[produkAktif];
+gambarProduk.src=p.gambar[gambarAktif];
+namaProduk.innerHTML=p.nama;
+hargaProduk.innerHTML="Rp "+p.harga.toLocaleString("id-ID");
+}
+function nextImage(){gambarAktif++;if(gambarAktif>=produk[produkAktif].gambar.length)gambarAktif=0;tampilProduk();}
+function prevImage(){gambarAktif--;if(gambarAktif<0)gambarAktif=produk[produkAktif].gambar.length-1;tampilProduk();}
+function tampilDaftar(){
+let isi="";
+for(let i=0;i<produk.length;i++)isi+=`<button class="list-group-item list-group-item-action" onclick="pilihProduk(${i})">${produk[i].nama}</button>`;
+listProduk.innerHTML=isi;
+}
+function pilihProduk(i){produkAktif=i;gambarAktif=0;tampilProduk();}
+function tampilJam(){jam.innerHTML=new Date().toLocaleString("id-ID");}
+setInterval(tampilJam,1000);
+tampilJam();
+tampilProduk();
+tampilDaftar();
+function pesan(){
+let nm=nama.value.trim(),jml=parseInt(jumlah.value),pr=promo.value.toUpperCase();
+if(nm==""||isNaN(jml)||jml<=0){alert("Nama pemesan dan jumlah harus diisi dengan benar!");return;}
+let harga=produk[produkAktif].harga,subtotal=harga*jml,potongan=pr=="DISKON10"?subtotal*.1:0,total=subtotal-potongan,id="INV-"+Math.floor(Math.random()*90000+10000);
+output.style.display="block";
+hasil.innerHTML=`
+<table class="table table-bordered">
+<tr><th width="35%">Order ID</th><td>${id}</td></tr>
+<tr><th>Nama Pemesan</th><td>${nm}</td></tr>
+<tr><th>Produk</th><td>${produk[produkAktif].nama}</td></tr>
+<tr><th>Harga</th><td>Rp ${harga.toLocaleString("id-ID")}</td></tr>
+<tr><th>Jumlah</th><td>${jml}</td></tr>
+<tr><th>Subtotal</th><td>Rp ${subtotal.toLocaleString("id-ID")}</td></tr>
+<tr><th>Potongan</th><td>Rp ${potongan.toLocaleString("id-ID")}</td></tr>
+<tr class="table-success"><th>Total Akhir</th><th>Rp ${total.toLocaleString("id-ID")}</th></tr>
+</table>`;
+}
+</script>
+</body>
+</html>
